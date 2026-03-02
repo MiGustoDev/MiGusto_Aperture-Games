@@ -7,27 +7,27 @@ Desde este menú se accede a distintos juegos web pensados para pantallas tácti
 
 ### Menú principal
 
-![Menú de juegos](public/assets/Menu.png)
+![Menú de juegos](public/Menu.png)
 
 ### Menú de selección de juego (Catch the Empanada)
 
-![Menú Catch](public/assets/CatchMenu.png)
+![Menú Catch](public/CatchMenu.png)
 
 ### Juego Catch the Empanada
 
-![Catch the Empanada](public/assets/CatchGame.png)
+![Catch the Empanada](public/CatchGame.png)
 
 ### Juego Empanada Crush
 
-![Empanada Crush](public/assets/CrushGame.png)
+![Empanada Crush](public/CrushGame.png)
 
 ### Juego Empanada Puzzle
 
-![Empanada Puzzle](public/assets/PuzzleGame.png)
+![Empanada Puzzle](public/PuzzleGame.png)
 
 ### Juego PacMan Empanada
 
-![PacMan Empanada](public/assets/PacmanGame.png)
+![PacMan Empanada](public/PacmanGame.png)
 
 ## Juegos incluidos
 
