@@ -23,18 +23,18 @@ const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const playAgainBtn = document.getElementById('play-again-btn');
 
-// Sound Manager
+// Sound Manager (local assets for offline use)
 const soundManager = {
     moveSound: new Howl({
-        src: ['https://cdn.pixabay.com/audio/2022/03/15/audio_7314757041.mp3'],
+        src: ['assets/sounds/move.wav'],
         volume: 0.5
     }),
     winSound: new Howl({
-        src: ['https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'],
+        src: ['assets/sounds/win.mp3'],
         volume: 0.6
     }),
     lossSound: new Howl({
-        src: ['https://cdn.pixabay.com/audio/2021/08/04/audio_bb38933b9e.mp3'],
+        src: ['assets/sounds/loss.wav'],
         volume: 0.5
     }),
     playMove: () => soundManager.moveSound.play(),
