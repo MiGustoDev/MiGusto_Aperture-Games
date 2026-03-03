@@ -4,10 +4,8 @@
 <head>
     <title>Pacman Empanada</title>
     <link rel="icon" type="image/png" href="Logo Mi Gusto 2025.png">
-    <link rel="stylesheet" href="../../assets/fonts/fonts.css">
     <link rel="stylesheet" href="Style.css">
-    <!-- Phaser local (offline) -->
-    <script src="../../libs/phaser.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.12/dist/phaser.js"></script>
 </head>
 
 <body>
@@ -23,7 +21,7 @@
     </div>
 
     <div class="container game-container">
-        <div id="start-screen" class="hidden">
+        <div id="start-screen">
 
             <h1>¡Bienvenido a PacMan Empanada!</h1>
             <p>Instrucciones:</p>
@@ -62,6 +60,22 @@
         </div>
     </div>
 
+    <script>
+        window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+            return t;
+        }(document, "script", "twitter-wjs"));
+    </script>
     <script src="script.js"></script>
 </body>
 
