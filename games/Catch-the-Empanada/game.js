@@ -22,12 +22,24 @@ const loadVideo = document.getElementById('load-video');
 const gameContainer = document.getElementById('game-container');
 
 // Configuración del Juego
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 800;
+let CANVAS_WIDTH = window.innerWidth;
+let CANVAS_HEIGHT = window.innerHeight;
 const PLAYER_WIDTH = 100;
 const PLAYER_HEIGHT = 40;
 const ITEM_SIZE = 60;
 const MAX_ITEMS = 8;
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    CANVAS_WIDTH = canvas.width;
+    CANVAS_HEIGHT = canvas.height;
+    // Adjust player Y position to stay near bottom
+    player.y = CANVAS_HEIGHT - player.height - 20;
+}
+window.addEventListener('resize', resizeCanvas);
+// Initial sizing
+resizeCanvas();
 const INITIAL_SPAWN_RATE = 1500; // ms
 
 // Estado del Juego
