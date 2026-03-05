@@ -122,3 +122,33 @@
 .modern-alert.loss .btn-modern:hover {
     box-shadow: 0 15px 25px rgba(229, 57, 53, 0.4);
 }
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .modern-alert {
+        padding: 25px 20px;
+        max-width: 320px;
+        border-radius: 20px;
+    }
+
+    .modern-alert h2 {
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+
+    .modern-alert p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .modern-alert .btn-modern {
+        padding: 12px 25px;
+        font-size: 18px;
+        border-radius: 12px;
+        width: 100%;
+    }
+
+    .modern-alert .btn-modern.menu-btn {
+        margin-top: 10px;
+    }
+}

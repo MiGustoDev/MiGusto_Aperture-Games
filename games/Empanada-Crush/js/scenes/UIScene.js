@@ -85,6 +85,7 @@ class UIScene extends Phaser.Scene {
 
     showStartModal(gameScene, logo) {
         const { width, height } = this.game.config;
+        const isMobile = width < 600;
 
         // Overlay obscuro parcial para resaltar modal
         let overlay = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.4);
@@ -93,16 +94,26 @@ class UIScene extends Phaser.Scene {
         let modalContainer = this.add.container(width / 2, height / 2);
         modalContainer.setScale(0);
 
+        // Dynamic Dimensions
+        const mWidth = isMobile ? 320 : 400;
+        const mHeight = isMobile ? 320 : 360;
+        const hTitle = isMobile ? -80 : -60;
+        const titleSize = isMobile ? '28px' : '32px';
+        const btnY = isMobile ? 35 : 70;
+        const menuBtnY = isMobile ? 100 : 145;
+        const btnW = 200;
+        const btnH = isMobile ? 50 : 60;
+
         let modalBg = this.add.graphics();
         modalBg.fillStyle(0x1a1a1a, 0.95);
-        modalBg.fillRoundedRect(-200, -150, 400, 360, 20); // Height increased to 360
+        modalBg.fillRoundedRect(-mWidth / 2, -mHeight / 2, mWidth, mHeight, 20);
         modalBg.lineStyle(4, 0xffcc00, 1);
-        modalBg.strokeRoundedRect(-200, -150, 400, 360, 20);
+        modalBg.strokeRoundedRect(-mWidth / 2, -mHeight / 2, mWidth, mHeight, 20);
         modalContainer.add(modalBg);
 
-        let title = this.add.text(0, -60, '¿Estás listo para\nel desafío?', {
+        let title = this.add.text(0, hTitle, '¿Estás listo para\nel desafío?', {
             fontFamily: 'Chewy',
-            fontSize: '32px',
+            fontSize: titleSize,
             fill: '#ffffff',
             align: 'center'
         }).setOrigin(0.5);
@@ -110,35 +121,36 @@ class UIScene extends Phaser.Scene {
 
         let btnBg = this.add.graphics();
         btnBg.fillStyle(0xffcc00, 1);
-        btnBg.fillRoundedRect(-100, 40, 200, 60, 15);
+        btnBg.fillRoundedRect(-btnW / 2, btnY - btnH / 2, btnW, btnH, 15);
         modalContainer.add(btnBg);
 
-        let btnText = this.add.text(0, 70, '¡COMENZAR!', {
+        let btnText = this.add.text(0, btnY, '¡COMENZAR!', {
             fontFamily: 'Fredoka',
-            fontSize: '24px',
+            fontSize: isMobile ? '20px' : '24px',
             fontWeight: '700',
             fill: '#000000'
         }).setOrigin(0.5);
         modalContainer.add(btnText);
 
-        let hitArea = this.add.rectangle(0, 70, 200, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        let hitArea = this.add.rectangle(0, btnY, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
         modalContainer.add(hitArea);
 
         // Botón Menú Principal (Estilo secundario)
         let menuBtnBg = this.add.graphics();
         menuBtnBg.lineStyle(2, 0xffffff, 0.8);
-        menuBtnBg.strokeRoundedRect(-100, 120, 200, 50, 15);
+        const menuH = isMobile ? 40 : 50;
+        menuBtnBg.strokeRoundedRect(-btnW / 2, menuBtnY - menuH / 2, btnW, menuH, 15);
         modalContainer.add(menuBtnBg);
 
-        let menuBtnText = this.add.text(0, 145, 'MENÚ PRINCIPAL', {
+        let menuBtnText = this.add.text(0, menuBtnY, 'MENÚ PRINCIPAL', {
             fontFamily: 'Fredoka',
-            fontSize: '18px',
+            fontSize: isMobile ? '16px' : '18px',
             fontWeight: '700',
             fill: '#ffffff'
         }).setOrigin(0.5);
         modalContainer.add(menuBtnText);
 
-        let menuHitArea = this.add.rectangle(0, 145, 200, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
+        let menuHitArea = this.add.rectangle(0, menuBtnY, btnW, menuH, 0x000000, 0).setInteractive({ useHandCursor: true });
         modalContainer.add(menuHitArea);
 
         menuHitArea.on('pointerdown', () => {
@@ -150,13 +162,13 @@ class UIScene extends Phaser.Scene {
             menuBtnText.setFill('#ffcc00');
             menuBtnBg.clear();
             menuBtnBg.lineStyle(2, 0xffcc00, 1);
-            menuBtnBg.strokeRoundedRect(-100, 120, 200, 50, 15);
+            menuBtnBg.strokeRoundedRect(-btnW / 2, menuBtnY - menuH / 2, btnW, menuH, 15);
         });
         menuHitArea.on('pointerout', () => {
             menuBtnText.setFill('#ffffff');
             menuBtnBg.clear();
             menuBtnBg.lineStyle(2, 0xffffff, 0.8);
-            menuBtnBg.strokeRoundedRect(-100, 120, 200, 50, 15);
+            menuBtnBg.strokeRoundedRect(-btnW / 2, menuBtnY - menuH / 2, btnW, menuH, 15);
         });
 
         hitArea.on('pointerdown', () => {
