@@ -30,8 +30,8 @@ const ITEM_SIZE = 60;
 const MAX_ITEMS = 8;
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
     CANVAS_WIDTH = canvas.width;
     CANVAS_HEIGHT = canvas.height;
     // Adjust player Y position to stay near bottom
@@ -187,7 +187,7 @@ class Item {
         this.y = -ITEM_SIZE;
         this.width = ITEM_SIZE;
         this.height = ITEM_SIZE;
-        this.speed = 2.5 + (score / 80); // Velocidad aumenta un poco más rápido con el score
+        this.speed = 4.0 + (score / 80); // Speed increased for totem start difficulty
 
         // Efecto de rotación
         this.angle = 0;
