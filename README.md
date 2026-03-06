@@ -1,62 +1,85 @@
-# Juegos para el Lollapalooza 2026
+# Juegos para aperturas de nuevos locales 2026
 
-Menú central de **juegos arcade temáticos sobre empanadas de Mi Gusto** utilizado en el stand de Mi Gusto en **Lollapalooza Buenos Aires 2026**.  
-Desde este menú se accede a distintos juegos web pensados para pantallas táctiles y monitores en el punto de experiencia.
+Menú central de **juegos arcade temáticos sobre empanadas de Mi Gusto** utilizado en experiencias interactivas durante **aperturas de nuevos locales de Mi Gusto**.
 
-## Demo
+Desde este menú se accede a distintos juegos web diseñados para funcionar en **múltiples plataformas y dispositivos**, generando una experiencia divertida e interactiva para los clientes.
 
-### Menú principal
+Los juegos pueden ejecutarse en:
 
-![Menú de juegos](public/Menu.png)
+- celulares
+- computadoras
+- paneles táctiles
+- tótems interactivos
+- televisores
+- pantallas de locales
+- navegadores web en general
 
-### Menú de selección de juego (Catch the Empanada)
+---
 
-![Menú Catch](public/CatchMenu.png)
+# Demo
 
-### Juego Catch the Empanada
+## Menú principal
 
-![Catch the Empanada](public/CatchGame.png)
+![Menú de juegos]
 
-### Juego Empanada Crush
+## Menú de selección de juego (Catch the Empanada)
 
-![Empanada Crush](public/CrushGame.png)
+![Menú Catch]
 
-### Juego Empanada Puzzle
+## Juego Catch the Empanada
 
-![Empanada Puzzle](public/PuzzleGame.png)
+![Catch the Empanada]
 
-### Juego PacMan Empanada
+## Juego Empanada Crush
 
-![PacMan Empanada](public/PacmanGame.png)
+![Empanada Crush]
 
-## Juegos incluidos
+## Juego Empanada Puzzle
 
-Desde el `index.html` menú principal se puede acceder a los siguientes juegos:
+![Empanada Puzzle]
+
+## Juego PacMan Empanada
+
+![PacMan Empanada]
+
+---
+
+# Juegos incluidos
+
+Desde el menú principal `index.html` se puede acceder a los siguientes juegos:
 
 - **Catch the Empanada**
 - **Empanada Crush**
 - **Empanada Puzzle**
 - **PacMan Empanada**
 
-Cada juego vive dentro de la carpeta `games/*/index.html` y se abre en el navegador como un juego web independiente.
+Cada juego vive dentro de la carpeta `games/*/index.html` y se abre en el navegador como un **juego web independiente**.
 
-## Características principales
+---
 
-- **Interfaz simple tipo kiosco**
-  - Pantalla de menú con grid de tarjetas de juego.
-  - Iconos y títulos claros para cada juego.
-  - Pensado para usarse a pantalla completa en un navegador.
-  - Adaptado para uso offline dentro del evento.
+# Características principales
 
-## Tecnologías utilizadas
+- **Interfaz simple estilo kiosco interactivo**
+- Menú central con grid de selección de juegos
+- Iconos e ilustraciones claras para cada juego
+- Diseñado para ejecutarse en **pantalla completa**
+- Experiencia optimizada para **pantallas táctiles**
+- **Multiplataforma**: funciona en celulares, computadoras, televisores, tótems y paneles interactivos
+- **Responsive** y adaptable a distintos tamaños de pantalla
+- Compatible con uso **online y offline**
 
-- HTML5
-- CSS3
-- JavaScript
-- React
+---
 
-## Desarrolladores
+# Tecnologías utilizadas
 
-- **[Facu14carrizo](https://github.com/Facu14carrizo)** · [LinkedIn](https://www.linkedin.com/in/facu14carrizo/)
-- **[ramirolacci](https://github.com/ramirolacci)** · [LinkedIn](https://www.linkedin.com/in/ramiro-lacci/)
+- HTML5  
+- CSS3  
+- JavaScript  
+- React  
 
+---
+
+# Desarrolladores
+
+- **Facu14carrizo** · LinkedIn  
+- **ramirolacci** · LinkedIn
