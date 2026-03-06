@@ -137,8 +137,8 @@ main {
     width: 100%;
     display: flex;
     justify-content: center;
-    transform: translateY(3rem);
-    /* translate-y-12 */
+    transform: translateY(15rem);
+    /* translate-y-60 lowered for totem header */
 }
 
 .game-board-container {
