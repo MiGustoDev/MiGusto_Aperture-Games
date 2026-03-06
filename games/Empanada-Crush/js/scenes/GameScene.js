@@ -390,7 +390,6 @@ class GameScene extends Phaser.Scene {
             const targetTile = this.board[targetRow][targetCol];
             if (targetTile) {
                 this.swapTiles(this.selectedTile, targetTile);
-                this.selectedTile.setAlpha(1);
                 this.selectedTile = null;
             }
         }
