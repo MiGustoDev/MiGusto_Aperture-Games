@@ -20,27 +20,27 @@ Los juegos pueden ejecutarse en:
 
 ## Menú principal
 
-![Menú de juegos]
+![Menú de juegos](public/Menu.png)
 
 ## Menú de selección de juego (Catch the Empanada)
 
-![Menú Catch]
+![Menú Catch](public/CatchMenu.png)
 
 ## Juego Catch the Empanada
 
-![Catch the Empanada]
+![Catch the Empanada](public/CatchGame.png)
 
 ## Juego Empanada Crush
 
-![Empanada Crush]
+![Empanada Crush](public/CrushGame.png)
 
 ## Juego Empanada Puzzle
 
-![Empanada Puzzle]
+![Empanada Puzzle](public/PuzzleGame.png)
 
 ## Juego PacMan Empanada
 
-![PacMan Empanada]
+![PacMan Empanada](public/PacmanGame.png)
 
 ---
 
