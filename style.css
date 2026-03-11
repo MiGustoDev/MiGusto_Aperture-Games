@@ -80,10 +80,10 @@ h1 {
 
 .game-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
-    /* Red glow for Mi Gusto brand feel? Or just white. let's go with a subtle glow */
-    border-color: #ff0000;
-    /* Mi Gusto red? */
+    box-shadow: 0 0 20px rgba(251, 192, 45, 0.4);
+    /* Golden glow */
+    border-color: #fbc02d;
+    /* Golden yellow */
     background: #252525;
 }
 
