@@ -1079,8 +1079,8 @@ class GameScene extends Phaser.Scene {
             // Como solo hay 1 nivel, ganaste el juego y el premio
             AlertManager.show({
                 title: '¡GANASTE!',
-                message: '¡Felicidades! Ganaste un<br><span style="color: #ffcc00; font-weight: bold; font-size: 22px;">COMBO DE 2 EMPANADAS</span><br><br><img src="assets/logo/Logo Mi Gusto 2025.png" style="width: 150px; height: auto;">',
-                buttonText: 'RECLAMAR PREMIO',
+                message: '¡Felicidades!<br><br><img src="assets/logo/Logo Mi Gusto 2025.png" style="width: 150px; height: auto;">',
+                buttonText: 'VOLVER A JUGAR',
                 type: 'win',
                 callback: () => {
                     // Aquí podrías redirigir a un formulario o mostrar un código
