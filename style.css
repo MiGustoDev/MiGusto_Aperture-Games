@@ -23,12 +23,12 @@ body {
 .container {
     text-align: center;
     padding: 2rem;
-    max-width: 800px;
+    max-width: 1000px;
     width: 100%;
 }
 
 .logo {
-    max-width: 300px;
+    max-width: 500px;
     margin-bottom: 2rem;
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
     animation: float 2s ease-in-out infinite alternate;

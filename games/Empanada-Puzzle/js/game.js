@@ -167,46 +167,79 @@ const updateTimerDisplay = () => {
     timerDisplay.textContent = `${mins}:${secs}`;
 };
 
+const initApp = () => {
+    gridEl.innerHTML = '';
+    tileElements = {};
+    for (let id = -1; id < TILE_COUNT * TILE_COUNT - 1; id++) {
+        const tileEl = document.createElement('div');
+        if (id === -1) {
+            tileEl.className = 'empty-tile';
+            tileEl.id = 'tile-empty';
+        } else {
+            tileEl.className = 'puzzle-tile';
+            tileEl.id = `tile-id-${id}`;
+            const { row, col } = getRowCol(id);
+            const xPercent = (col / (TILE_COUNT - 1)) * 100;
+            const yPercent = (row / (TILE_COUNT - 1)) * 100;
+            const imgEl = document.createElement('div');
+            imgEl.className = 'tile-image';
+            imgEl.style.backgroundImage = `url('${IMAGE_SRC}')`;
+            imgEl.style.backgroundSize = `${TILE_COUNT * 100}% ${TILE_COUNT * 100}%`;
+            imgEl.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+            tileEl.appendChild(imgEl);
+            tileEl.appendChild(document.createElement('div')).className = 'tile-overlay';
+            tileEl.addEventListener('click', () => handleTileClick(tiles.indexOf(id)));
+            setupTouchEvents(tileEl, id);
+        }
+        tileElements[id] = tileEl;
+        gridEl.appendChild(tileEl);
+    }
+};
+
+const setupTouchEvents = (tileEl, id) => {
+    let touchStartX = 0, touchStartY = 0;
+    tileEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    tileEl.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+            const index = tiles.indexOf(id), emptyIndex = tiles.indexOf(-1);
+            const { row: targetRow, col: targetCol } = getRowCol(index);
+            const { row: emptyRow, col: emptyCol } = getRowCol(emptyIndex);
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0 && emptyCol === targetCol + 1 && emptyRow === targetRow) handleTileClick(index);
+                if (dx < 0 && emptyCol === targetCol - 1 && emptyRow === targetRow) handleTileClick(index);
+            } else {
+                if (dy > 0 && emptyRow === targetRow + 1 && emptyCol === targetCol) handleTileClick(index);
+                if (dy < 0 && emptyRow === targetRow - 1 && emptyCol === targetCol) handleTileClick(index);
+            }
+        }
+    });
+};
+
 const handleTileClick = (index) => {
     if (!hasStarted || isGameOver || isVictory || isAnimating) return;
-
     const emptyIndex = tiles.indexOf(-1);
     if (isAdjacent(index, emptyIndex)) {
-        // Swap Logic
-        const newTiles = [...tiles];
+        const newTiles = [...tiles], tileId = tiles[index];
         [newTiles[index], newTiles[emptyIndex]] = [newTiles[emptyIndex], newTiles[index]];
-
         soundManager.playMove();
-
-        // Animation
-        const tileEl = document.getElementById(`tile-${index}`);
-        const emptyEl = document.getElementById(`tile-empty`); // We need to track the empty slot element or position
-
-        // Easier approach: Just re-render logic with FLIP-like animation or simplified CSS transition?
-        // Let's us GSAP for accurate movement matching logic
-        // Calculate relative position difference
-        const { row: currentRow, col: currentCol } = getRowCol(index);
-        const { row: emptyRow, col: emptyCol } = getRowCol(emptyIndex);
-
-        const xDiff = (emptyCol - currentCol) * 100;
-        const yDiff = (emptyRow - currentRow) * 100;
-
+        const tileEl = tileElements[tileId];
+        const { row: r1, col: c1 } = getRowCol(index);
+        const { row: r2, col: c2 } = getRowCol(emptyIndex);
         isAnimating = true;
-
         gsap.to(tileEl, {
-            xPercent: xDiff,
-            yPercent: yDiff,
-            duration: 0.2,
-            ease: "power2.out",
+            xPercent: (c2 - c1) * 100, yPercent: (r2 - r1) * 100,
+            duration: 0.15, ease: "power2.out",
             onComplete: () => {
-                gsap.set(tileEl, { xPercent: 0, yPercent: 0 }); // Reset transform
+                gsap.set(tileEl, { xPercent: 0, yPercent: 0 });
                 tiles = newTiles;
-                renderGrid(); // Re-render DOM sorted
+                renderGrid();
                 isAnimating = false;
-
-                if (isWin(tiles)) {
-                    handleWin();
-                }
+                if (isWin(tiles)) handleWin();
             }
         });
     }
@@ -244,71 +277,10 @@ const handleGameOver = () => {
 };
 
 const renderGrid = () => {
-    gridEl.innerHTML = '';
-
     tiles.forEach((tileId, index) => {
-        const tileEl = document.createElement('div');
-
-        if (tileId === -1) {
-            tileEl.id = `tile-empty`;
-            tileEl.className = 'empty-tile';
-        } else {
-            tileEl.id = `tile-${index}`; // ID based on current index for animation targeting
-            tileEl.className = 'puzzle-tile';
-
-            const { row, col } = getRowCol(tileId); // Original position for image background
-            const xPercent = (col / (TILE_COUNT - 1)) * 100;
-            const yPercent = (row / (TILE_COUNT - 1)) * 100;
-
-            const imgEl = document.createElement('div');
-            imgEl.className = 'tile-image';
-            imgEl.style.backgroundImage = `url('${IMAGE_SRC}')`;
-            imgEl.style.backgroundSize = `${TILE_COUNT * 100}% ${TILE_COUNT * 100}%`;
-            imgEl.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
-
-            const overlayEl = document.createElement('div');
-            overlayEl.className = 'tile-overlay';
-
-            tileEl.appendChild(imgEl);
-            tileEl.appendChild(overlayEl);
-
-            // Mouse Click
-            tileEl.addEventListener('click', () => handleTileClick(index));
-
-            // Touch Events (Basic Swiping)
-            let touchStartX = 0;
-            let touchStartY = 0;
-
-            tileEl.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
-
-            tileEl.addEventListener('touchend', (e) => {
-                const touchEndX = e.changedTouches[0].clientX;
-                const touchEndY = e.changedTouches[0].clientY;
-
-                const dx = touchEndX - touchStartX;
-                const dy = touchEndY - touchStartY;
-
-                if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
-                    const emptyIndex = tiles.indexOf(-1);
-                    const { row: targetRow, col: targetCol } = getRowCol(index);
-                    const { row: emptyRow, col: emptyCol } = getRowCol(emptyIndex);
-
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        // Horizontal
-                        if (dx > 0 && emptyCol === targetCol + 1 && emptyRow === targetRow) handleTileClick(index);
-                        if (dx < 0 && emptyCol === targetCol - 1 && emptyRow === targetRow) handleTileClick(index);
-                    } else {
-                        // Vertical
-                        if (dy > 0 && emptyRow === targetRow + 1 && emptyCol === targetCol) handleTileClick(index);
-                        if (dy < 0 && emptyRow === targetRow - 1 && emptyCol === targetCol) handleTileClick(index);
-                    }
-                }
-            });
-        }
-        gridEl.appendChild(tileEl);
+        const { row, col } = getRowCol(index);
+        const el = tileElements[tileId];
+        if (el) { el.style.gridRow = row + 1; el.style.gridColumn = col + 1; }
     });
 };
 
@@ -328,5 +300,6 @@ window.addEventListener('load', () => {
         ease: "power1.inOut"
     });
 
+    initApp();
     initGame();
 });

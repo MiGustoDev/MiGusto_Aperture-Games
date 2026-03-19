@@ -54,7 +54,7 @@ body {
 
 .game-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,7 +65,7 @@ body {
 #mycanvas {
     width: 95vw !important;
     height: auto !important;
-    max-width: 800px;
+    max-width: 1000px;
     border: 3px solid yellow;
     border-radius: 10px;
 }
@@ -75,9 +75,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 800px;
-    height: 625px;
-    background-color: rgba(0, 0, 0, 0.85);
+    width: 100% !important;
+    max-width: 1000px;
+    height: 780px;
+    background-color: rgba(0, 0, 0, 0.95);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -161,9 +162,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 800px;
-    height: 625px;
-    background-color: rgba(0, 0, 0, 0.9);
+    width: 100% !important;
+    max-width: 1000px;
+    height: 780px;
+    background-color: rgba(0, 0, 0, 0.95);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -238,9 +240,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 800px;
-    height: 625px;
-    background-color: rgba(0, 0, 0, 0.9);
+    width: 100% !important;
+    max-width: 1000px;
+    height: 780px;
+    background-color: rgba(0, 0, 0, 0.95);
     display: flex;
     flex-direction: column;
     justify-content: center;
