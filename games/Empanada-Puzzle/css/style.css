@@ -242,28 +242,34 @@ main {
     backdrop-filter: blur(4px);
     position: relative;
     overflow: hidden;
-    width: 85vw;
-    max-width: 800px;
+    width: 798px !important;
+    height: 798px !important;
     aspect-ratio: 1/1;
-    visibility: hidden; /* Oculto hasta que el script lo posiciones */
+    visibility: hidden;
     margin: 0 auto;
 }
 
 .puzzle-tile {
     position: absolute;
-    width: calc(33.333% - 0.35rem);
-    height: calc(33.333% - 0.35rem);
+    width: 260px; /* (798 / 3) - margen */
+    height: 260px;
     cursor: pointer;
     overflow: hidden;
     border-radius: 0.5rem;
     touch-action: none;
     left: 0;
     top: 0;
-    will-change: transform; /* Optimizamos para hardware */
+    /* Estabilización de Capas GPU */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
+/* Eliminado efecto scale para mayor estabilidad en totem táctil */
 .puzzle-tile:active {
-    transform: scale(0.95);
+    opacity: 0.9;
 }
 
 .tile-image {

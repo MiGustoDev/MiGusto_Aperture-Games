@@ -218,14 +218,13 @@ const initApp = () => {
             setupTouchEvents(tileEl, id);
         }
         
-        // POSICIONAMIENTO INICIAL POR TRANSFORM
+        // POSICIONAMIENTO EN PÍXELES ENTEROS (Evita parpadeos de subpíxel)
         const currentIndex = tiles.indexOf(id);
         const { row, col } = getRowCol(currentIndex);
         
-        // Usamos set para fijar la posición inicial vía transform (x, y)
         gsap.set(tileEl, {
-            x: `${col * 100}%`,
-            y: `${row * 100}%`,
+            x: col * 266,
+            y: row * 266,
             left: 0,
             top: 0
         });
@@ -273,10 +272,10 @@ const handleTileClick = (index) => {
         const tileEl = tileElements[tileId];
         const { row: r1, col: c1 } = getRowCol(index);
         const { row: r2, col: c2 } = getRowCol(emptyIndex);        isAnimating = true;
-        // Animamos X e Y (Translate) para máxima fluidez sin parpadeos de layout
+        // Animamos X e Y a coordenadas de píxel ENTERAS
         gsap.to(tileEl, {
-            x: `${c2 * 100}%`,
-            y: `${r2 * 100}%`,
+            x: c2 * 266,
+            y: r2 * 266,
             duration: 0.2,
             ease: "power2.inOut",
             onComplete: () => {
@@ -325,8 +324,8 @@ const renderGrid = () => {
         const el = tileElements[tileId];
         if (el) {
             gsap.set(el, {
-                x: `${col * 100}%`,
-                y: `${row * 100}%`
+                x: col * 266,
+                y: row * 266
             });
         }
     });
