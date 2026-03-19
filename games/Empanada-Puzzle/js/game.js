@@ -113,7 +113,9 @@ const isWin = (currentTiles) => {
 
 // Game Logic
 const initGame = () => {
-    tiles = shuffleTiles();
+    // Si ya barajamos en initApp, no volvemos a barajar para evitar el parpadeo de re-renderizado
+    if (tiles.length === 0) tiles = shuffleTiles();
+    
     timeLeft = 60;
     isGameOver = false;
     isVictory = false;
@@ -123,9 +125,7 @@ const initGame = () => {
     clearInterval(timerInterval);
     updateTimerDisplay();
 
-    // Reset UI
-    gridEl.style.gridTemplateColumns = `repeat(${TILE_COUNT}, 1fr)`;
-    startOverlay.classList.remove('hidden'); // Show start screen
+    startOverlay.classList.remove('hidden');
     resultModal.classList.add('hidden');
     timerIconBox.classList.remove('bg-red', 'animate-pulse');
     timerDisplay.classList.remove('text-red');
@@ -165,31 +165,51 @@ const updateTimerDisplay = () => {
 };
 
 const initApp = () => {
+    // Si tiles no está inicializado (primer inicio), lo barajamos ahora
+    if (tiles.length === 0) tiles = shuffleTiles();
+    
     const fragment = document.createDocumentFragment();
     tileElements = {};
+    
+    // Iteramos por los 9 IDs posibles (incluyendo el -1 vacío)
     for (let id = -1; id < TILE_COUNT * TILE_COUNT - 1; id++) {
         const tileEl = document.createElement('div');
         if (id === -1) {
             tileEl.className = 'empty-tile';
         } else {
             tileEl.className = 'puzzle-tile';
-            tileEl.style.opacity = '1'; // Asegurar opacidad total desde el inicio
-            const { row, col } = getRowCol(id);
-            const xPercent = (col / (TILE_COUNT - 1)) * 100;
-            const yPercent = (row / (TILE_COUNT - 1)) * 100;
+            tileEl.style.opacity = '1';
+            
+            // Calculamos el recorte de la imagen (esto es estático para cada pieza)
+            const { row: solvedRow, col: solvedCol } = getRowCol(id);
+            const xOffset = solvedCol * 100 / (TILE_COUNT - 1);
+            const yOffset = solvedRow * 100 / (TILE_COUNT - 1);
+            
             const imgEl = document.createElement('div');
             imgEl.className = 'tile-image';
             imgEl.style.backgroundImage = `url('${IMAGE_SRC}')`;
             imgEl.style.backgroundSize = `${TILE_COUNT * 100}% ${TILE_COUNT * 100}%`;
-            imgEl.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+            imgEl.style.backgroundPosition = `${xOffset}% ${yOffset}%`;
             tileEl.appendChild(imgEl);
             tileEl.appendChild(document.createElement('div')).className = 'tile-overlay';
-            tileEl.addEventListener('click', () => handleTileClick(tiles.indexOf(id)));
+            
+            tileEl.addEventListener('click', () => {
+                const currentIndex = tiles.indexOf(id);
+                handleTileClick(currentIndex);
+            });
             setupTouchEvents(tileEl, id);
         }
+        
+        // POSICIONAMIENTO DETERMINISTA ANTES DE AÑADIR AL DOM
+        const currentIndex = tiles.indexOf(id);
+        const { row, col } = getRowCol(currentIndex);
+        tileEl.style.left = `${col * 33.333}%`;
+        tileEl.style.top = `${row * 33.333}%`;
+        
         tileElements[id] = tileEl;
         fragment.appendChild(tileEl);
     }
+    
     gridEl.innerHTML = '';
     gridEl.appendChild(fragment);
 };
