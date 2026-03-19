@@ -168,16 +168,15 @@ const updateTimerDisplay = () => {
 };
 
 const initApp = () => {
-    gridEl.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     tileElements = {};
     for (let id = -1; id < TILE_COUNT * TILE_COUNT - 1; id++) {
         const tileEl = document.createElement('div');
         if (id === -1) {
             tileEl.className = 'empty-tile';
-            tileEl.id = 'tile-empty';
         } else {
             tileEl.className = 'puzzle-tile';
-            tileEl.id = `tile-id-${id}`;
+            tileEl.style.opacity = '0'; // Sigo manteniendo la opacidad en 0
             const { row, col } = getRowCol(id);
             const xPercent = (col / (TILE_COUNT - 1)) * 100;
             const yPercent = (row / (TILE_COUNT - 1)) * 100;
@@ -188,13 +187,14 @@ const initApp = () => {
             imgEl.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
             tileEl.appendChild(imgEl);
             tileEl.appendChild(document.createElement('div')).className = 'tile-overlay';
-            tileEl.style.opacity = '0'; // Ocultar por defecto para evitar parpadeos
             tileEl.addEventListener('click', () => handleTileClick(tiles.indexOf(id)));
             setupTouchEvents(tileEl, id);
         }
         tileElements[id] = tileEl;
-        gridEl.appendChild(tileEl);
+        fragment.appendChild(tileEl);
     }
+    gridEl.innerHTML = '';
+    gridEl.appendChild(fragment);
 };
 
 const setupTouchEvents = (tileEl, id) => {
@@ -306,8 +306,15 @@ window.addEventListener('load', () => {
         ease: "power1.inOut"
     });
 
+    // Ocultamos el grid por completo antes de inicializar
+    gridEl.style.display = 'none';
+    
     initApp();
     initGame();
-    // Una vez todo posicionado e invisible (opacity 0), mostramos el contenedor
-    gridEl.style.visibility = 'visible';
+    
+    // Pequeño retardo de seguridad antes de mostrar el bloque final ya posicionado
+    requestAnimationFrame(() => {
+        gridEl.style.display = 'block';
+        gridEl.style.visibility = 'visible';
+    });
 });

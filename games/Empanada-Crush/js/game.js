@@ -5,8 +5,8 @@ const config = {
     height: window.innerHeight,
     backgroundColor: '#1a1a1a',
     scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        mode: Phaser.Scale.ENVELOP,
+        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     scene: [BootScene, PreloaderScene, GameScene, UIScene]
 };
