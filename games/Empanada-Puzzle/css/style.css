@@ -257,7 +257,9 @@ main {
     overflow: hidden;
     border-radius: 0.5rem;
     touch-action: none;
-    transition: box-shadow 0.2s;
+    left: 0;
+    top: 0;
+    will-change: transform; /* Optimizamos para hardware */
 }
 
 .puzzle-tile:active {
@@ -289,6 +291,9 @@ main {
     height: calc(33.333% - 0.35rem);
     background: rgba(24, 24, 27, 0.5);
     border-radius: 0.5rem;
+    left: 0;
+    top: 0;
+    will-change: transform;
 }
 
 /* Overlays (Start & Modal) */

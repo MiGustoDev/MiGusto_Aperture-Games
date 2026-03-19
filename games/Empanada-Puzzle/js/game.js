@@ -167,7 +167,6 @@ const startGame = () => {
         updateTimerDisplay();
 
         if (timeLeft <= 10) {
-            timerIconBox.classList.add('bg-red', 'animate-pulse');
             timerDisplay.classList.add('text-red');
         }
 
@@ -219,11 +218,17 @@ const initApp = () => {
             setupTouchEvents(tileEl, id);
         }
         
-        // POSICIONAMIENTO INMEDIATO
+        // POSICIONAMIENTO INICIAL POR TRANSFORM
         const currentIndex = tiles.indexOf(id);
         const { row, col } = getRowCol(currentIndex);
-        tileEl.style.left = `${col * 33.333}%`;
-        tileEl.style.top = `${row * 33.333}%`;
+        
+        // Usamos set para fijar la posición inicial vía transform (x, y)
+        gsap.set(tileEl, {
+            x: `${col * 100}%`,
+            y: `${row * 100}%`,
+            left: 0,
+            top: 0
+        });
         
         tileElements[id] = tileEl;
         fragment.appendChild(tileEl);
@@ -268,11 +273,12 @@ const handleTileClick = (index) => {
         const tileEl = tileElements[tileId];
         const { row: r1, col: c1 } = getRowCol(index);
         const { row: r2, col: c2 } = getRowCol(emptyIndex);        isAnimating = true;
+        // Animamos X e Y (Translate) para máxima fluidez sin parpadeos de layout
         gsap.to(tileEl, {
-            left: `${c2 * 33.333}%`,
-            top: `${r2 * 33.333}%`,
-            duration: 0.15,
-            ease: "power2.out",
+            x: `${c2 * 100}%`,
+            y: `${r2 * 100}%`,
+            duration: 0.2,
+            ease: "power2.inOut",
             onComplete: () => {
                 tiles = newTiles;
                 isAnimating = false;
@@ -318,8 +324,10 @@ const renderGrid = () => {
         const { row, col } = getRowCol(index);
         const el = tileElements[tileId];
         if (el) {
-            el.style.left = `${col * 33.333}%`;
-            el.style.top = `${row * 33.333}%`;
+            gsap.set(el, {
+                x: `${col * 100}%`,
+                y: `${row * 100}%`
+            });
         }
     });
 };
@@ -331,14 +339,7 @@ playAgainBtn.addEventListener('click', initGame);
 
 // Animations
 window.addEventListener('load', () => {
-    // Logo Float
-    gsap.to("#logo", {
-        y: -10,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-    });
+    // Animaciones pesadas eliminadas para estabilidad en el totem
 
     initApp();
     initGame();
