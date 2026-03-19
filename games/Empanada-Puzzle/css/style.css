@@ -242,8 +242,10 @@ main {
     backdrop-filter: blur(4px);
     position: relative;
     overflow: hidden;
-    width: min(95vw, 1000px);
+    width: 100vw;
+    max-width: 1080px;
     aspect-ratio: 1/1;
+    visibility: hidden; /* Oculto hasta que el script lo posicione */
 }
 
 .puzzle-tile {

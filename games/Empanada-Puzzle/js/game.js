@@ -308,4 +308,6 @@ window.addEventListener('load', () => {
 
     initApp();
     initGame();
+    // Una vez todo posicionado e invisible (opacity 0), mostramos el contenedor
+    gridEl.style.visibility = 'visible';
 });
