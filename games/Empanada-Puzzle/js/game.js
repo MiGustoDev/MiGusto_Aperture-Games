@@ -4,6 +4,30 @@ const IMAGE_SRC = 'assets/CRUNCHY.png';
 
 // State
 let tiles = [];
+// Barajamos INMEDIATAMENTE para que initApp use el estado final
+const shuffle = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+const isValid = (arr) => {
+    let inv = 0;
+    for (let i = 0; i < 8; i++)
+        for (let j = i + 1; j < 8; j++)
+            if (arr[i] > -1 && arr[j] > -1 && arr[i] > arr[j]) inv++;
+    return inv % 2 === 0;
+};
+const generateTiles = () => {
+    let arr;
+    do { arr = shuffle([-1, 0, 1, 2, 3, 4, 5, 6, 7]); } while (!isValid(arr));
+    return arr;
+};
+
+tiles = generateTiles();
+
 let hasStarted = false;
 let timeLeft = 60;
 let isGameOver = false;
@@ -113,9 +137,7 @@ const isWin = (currentTiles) => {
 
 // Game Logic
 const initGame = () => {
-    // Si ya barajamos en initApp, no volvemos a barajar para evitar el parpadeo de re-renderizado
-    if (tiles.length === 0) tiles = shuffleTiles();
-    
+    // Ya no barajamos aquí, usamos el estado global inicial
     timeLeft = 60;
     isGameOver = false;
     isVictory = false;
@@ -130,7 +152,7 @@ const initGame = () => {
     timerIconBox.classList.remove('bg-red', 'animate-pulse');
     timerDisplay.classList.remove('text-red');
 
-    renderGrid();
+    // renderGrid() ya no es necesario aquí porque initApp() dejó todo listo
 };
 
 
@@ -165,9 +187,6 @@ const updateTimerDisplay = () => {
 };
 
 const initApp = () => {
-    // Si tiles no está inicializado (primer inicio), lo barajamos ahora
-    if (tiles.length === 0) tiles = shuffleTiles();
-    
     const fragment = document.createDocumentFragment();
     tileElements = {};
     
@@ -180,7 +199,7 @@ const initApp = () => {
             tileEl.className = 'puzzle-tile';
             tileEl.style.opacity = '1';
             
-            // Calculamos el recorte de la imagen (esto es estático para cada pieza)
+            // Calculamos el recorte de la imagen (estático)
             const { row: solvedRow, col: solvedCol } = getRowCol(id);
             const xOffset = solvedCol * 100 / (TILE_COUNT - 1);
             const yOffset = solvedRow * 100 / (TILE_COUNT - 1);
@@ -200,7 +219,7 @@ const initApp = () => {
             setupTouchEvents(tileEl, id);
         }
         
-        // POSICIONAMIENTO DETERMINISTA ANTES DE AÑADIR AL DOM
+        // POSICIONAMIENTO INMEDIATO
         const currentIndex = tiles.indexOf(id);
         const { row, col } = getRowCol(currentIndex);
         tileEl.style.left = `${col * 33.333}%`;
@@ -211,6 +230,7 @@ const initApp = () => {
     }
     
     gridEl.innerHTML = '';
+    // Agregamos todo de una sola vez
     gridEl.appendChild(fragment);
 };
 
@@ -342,14 +362,14 @@ window.addEventListener('load', () => {
     });
 
     // Ocultamos el grid por completo antes de inicializar
-    gridEl.style.display = 'none';
-    
-    initApp();
-    initGame();
-    
+    // gridEl.style.display = 'none'; // Eliminado, ya no es necesario ocultar y mostrar
+
+    initApp(); // initApp ahora inicializa y baraja las tiles
+    initGame(); // initGame ya no necesita llamar a renderGrid
+
     // Pequeño retardo de seguridad antes de mostrar el bloque final ya posicionado
     requestAnimationFrame(() => {
-        gridEl.style.display = 'block';
-        gridEl.style.visibility = 'visible';
+        // gridEl.style.display = 'block'; // Eliminado, ya no es necesario cambiar display
+        gridEl.style.visibility = 'visible'; // Mostramos solo cuando ya está todo inyectado y posicionado
     });
 });
