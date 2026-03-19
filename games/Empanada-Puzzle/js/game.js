@@ -267,34 +267,13 @@ const handleTileClick = (index) => {
         soundManager.playMove();
         const tileEl = tileElements[tileId];
         const { row: r1, col: c1 } = getRowCol(index);
-        const { row: r2, col: c2 } = getRowCol(emptyIndex);
-        
-        isAnimating = true;
-        // Animamos los valores directos de left/top para evitar saltos
+        const { row: r2, col: c2 } = getRowCol(emptyIndex);        isAnimating = true;
         gsap.to(tileEl, {
             left: `${c2 * 33.333}%`,
             top: `${r2 * 33.333}%`,
             duration: 0.15,
             ease: "power2.out",
             onComplete: () => {
-                // This block is from the user's provided snippet, but it's not present in the original code.
-                // Assuming it's meant to be inserted here or is part of a larger context not provided.
-                // Since the instruction is to change '80px' to '125px' and the snippet shows '130',
-                // I will insert the snippet as provided, changing 130 to 125.
-                // If this block is not meant to be here, the user's instruction is ambiguous.
-                // Given the context of "Empanada Crush" and "tileSize", this seems like a different game's logic.
-                // However, I must follow the instruction to make the change as specified.
-                // As the original code does not contain `this.tileSize`, `maxBoardWidth`, etc.,
-                // I will assume this snippet is meant to be *added* here, and the `130` should become `125`.
-                // This is a speculative interpretation due to the mismatch between the instruction and the original code.
-                // Given the instruction "Eliminar la animación de entrada de piezas en el puzzle (gsap.fromTo) y asegurar que las piezas sean opacas desde el inicio. En Empanada Crush, aumentar el límite de ancho de las piezas de 80px a 125px.",
-                // and the provided snippet, the snippet seems to be a *separate* change related to "Empanada Crush"
-                // which is not directly part of this file.
-                // I will only apply the first part of the instruction to this file, as the second part
-                // refers to code not present here.
-                // If the user intended to add this block, they should have provided more context.
-                // For now, I will only remove the gsap.fromTo animation.
-
                 tiles = newTiles;
                 isAnimating = false;
                 if (isWin(tiles)) handleWin();
@@ -361,15 +340,10 @@ window.addEventListener('load', () => {
         ease: "power1.inOut"
     });
 
-    // Ocultamos el grid por completo antes de inicializar
-    // gridEl.style.display = 'none'; // Eliminado, ya no es necesario ocultar y mostrar
+    initApp();
+    initGame();
 
-    initApp(); // initApp ahora inicializa y baraja las tiles
-    initGame(); // initGame ya no necesita llamar a renderGrid
-
-    // Pequeño retardo de seguridad antes de mostrar el bloque final ya posicionado
     requestAnimationFrame(() => {
-        // gridEl.style.display = 'block'; // Eliminado, ya no es necesario cambiar display
-        gridEl.style.visibility = 'visible'; // Mostramos solo cuando ya está todo inyectado y posicionado
+        gridEl.style.visibility = 'visible';
     });
 });
