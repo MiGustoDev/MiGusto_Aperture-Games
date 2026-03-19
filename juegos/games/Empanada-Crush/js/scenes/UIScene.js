@@ -7,27 +7,38 @@ class UIScene extends Phaser.Scene {
         const gameScene = this.scene.get('GameScene');
         const bouncyStyle = { fontFamily: 'Chewy' };
         const roundedStyle = { fontFamily: 'Fredoka', fontWeight: '700' };
+        const isMobile = this.game.config.width < 600;
 
         // Score con animación de rolling
         this.displayScore = 0;
-        this.scoreText = this.add.text(40, 40, 'Puntaje: 0', { ...bouncyStyle, fontSize: '56px', fill: '#ffffff' });
-        this.movesText = this.add.text(40, 110, 'Movimientos: ' + gameScene.moves, { ...roundedStyle, fontSize: '32px', fill: '#cccccc' });
-        this.objectiveText = this.add.text(40, 160, gameScene.objectiveDescription, { ...roundedStyle, fontSize: '26px', fill: '#ffcc00' });
+        const scoreFontSize = isMobile ? '42px' : '56px';
+        const movesFontSize = isMobile ? '24px' : '32px';
+        const objFontSize = isMobile ? '20px' : '26px';
+
+        this.scoreText = this.add.text(isMobile ? 20 : 40, isMobile ? 40 : 40, 'Puntaje: 0', { ...bouncyStyle, fontSize: scoreFontSize, fill: '#ffffff' });
+        this.movesText = this.add.text(isMobile ? 20 : 40, isMobile ? 95 : 110, 'Movimientos: ' + gameScene.moves, { ...roundedStyle, fontSize: movesFontSize, fill: '#cccccc' });
+        this.objectiveText = this.add.text(isMobile ? 20 : 40, isMobile ? 135 : 160, gameScene.objectiveDescription, { ...roundedStyle, fontSize: objFontSize, fill: '#ffcc00' });
 
         // Add Logo
-        const logo = this.add.image(this.game.config.width - 40, 40, 'logo');
+        const logoX = this.game.config.width - (isMobile ? 20 : 40);
+        const logoY = isMobile ? 35 : 40;
+        const logo = this.add.image(logoX, logoY, 'logo');
         logo.setOrigin(1, 0);
-        logo.setDisplaySize(180, 72);
+        const logoWidth = isMobile ? 120 : 180;
+        const logoHeight = isMobile ? 48 : 72;
+        logo.setDisplaySize(logoWidth, logoHeight);
         logo.setAlpha(0);
 
         // Intro Animation for UI (GSAP Style) - Solo se activa tras el modal
         const { width, height } = this.game.config;
-        this.instructionText = this.add.text(width / 2, height - 60, 'Desliza o toca para mover las piezas', {
+        const instructionFontSize = isMobile ? '20px' : '28px';
+        this.instructionText = this.add.text(width / 2, height - (isMobile ? 40 : 60), 'Desliza o toca para mover las piezas', {
             fontFamily: 'Fredoka',
-            fontSize: '28px',
+            fontSize: instructionFontSize,
             fill: '#ffffff',
             align: 'center'
         }).setOrigin(0.5);
+        this.instructionText.setAlpha(0); // Hide until game starts
 
         this.container = this.add.container(0, 0, [this.scoreText, this.movesText, this.objectiveText, this.instructionText]);
         this.container.x = -300;
@@ -190,6 +201,11 @@ class UIScene extends Phaser.Scene {
                         x: 0,
                         duration: 800,
                         ease: 'Back.easeOut'
+                    });
+                    this.tweens.add({
+                        targets: this.instructionText,
+                        alpha: 1,
+                        duration: 800
                     });
 
                     this.tweens.add({

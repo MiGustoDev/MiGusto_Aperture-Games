@@ -41,7 +41,7 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 // Initial sizing will be called after player initialization
-const INITIAL_SPAWN_RATE = 1500; // ms
+const INITIAL_SPAWN_RATE = 1800; // ms
 
 // Estado del Juego
 let gameState = 'MENU'; // MENU, PLAYING, GAMEOVER, WIN
@@ -137,7 +137,7 @@ class Player {
         this.height = 80; // Aumentado para que la caja se vea mejor
         this.x = CANVAS_WIDTH / 2 - this.width / 2;
         this.y = CANVAS_HEIGHT - this.height - 20; // Ajustado dinámicamente
-        this.speed = 10; // Un poco más rápido
+        this.speed = 12; // Un poco más rápido
         this.keys = {};
         this.bounceY = 0; // Para animación GSAP
     }
@@ -172,9 +172,9 @@ class Item {
             this.isGood = (forcedType === 'empanada');
         } else {
             // Probabilidad de bombitas (objetos malos) aumenta con el puntaje
-            const baseBadProb = 0.15; // Inicia en 15%
-            const maxBadProb = 0.45;  // Máximo 45%
-            const badProb = Math.min(maxBadProb, baseBadProb + (score / 1800));
+            const baseBadProb = 0.10; // Inicia en 10%
+            const maxBadProb = 0.35;  // Máximo 35%
+            const badProb = Math.min(maxBadProb, baseBadProb + (score / 2500));
             this.isGood = Math.random() > badProb;
         }
 
@@ -188,7 +188,8 @@ class Item {
         this.y = -ITEM_SIZE;
         this.width = ITEM_SIZE;
         this.height = ITEM_SIZE;
-        this.speed = 4.0 + (score / 80); // Speed increased for totem start difficulty
+        // Ajuste leve de dificultad: caída un poco más lenta y escala menos agresiva con el score
+        this.speed = 3.3 + (score / 140);
 
         // Efecto de rotación
         this.angle = 0;
@@ -366,7 +367,7 @@ function gameWin() {
 }
 
 function updateHUD() {
-    scoreEl.innerText = `Score: ${score}/1200`;
+    scoreEl.innerText = `Score: ${score}/500`;
     missedEl.innerText = `Perdidas: ${missed}/3`;
 }
 
@@ -419,7 +420,8 @@ function gameLoop(timestamp) {
 
         lastSpawnTime = timestamp;
         // Aumentar dificultad: los objetos aparecen más rápido conforme sube el score
-        spawnRate = Math.max(350, INITIAL_SPAWN_RATE - (score * 6));
+        // Ajuste leve: acelera un poco menos y no baja tanto el mínimo
+        spawnRate = Math.max(450, INITIAL_SPAWN_RATE - (score * 5));
     }
 
     player.update();
@@ -475,7 +477,7 @@ function gameLoop(timestamp) {
 
                 updateHUD();
 
-                if (score >= 1200) {
+                if (score >= 500) {
                     gameWin();
                     return;
                 }

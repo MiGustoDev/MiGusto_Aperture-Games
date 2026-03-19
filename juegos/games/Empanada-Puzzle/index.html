@@ -9,7 +9,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="../../assets/fonts/fonts.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=1.6">
 
     <!-- Tailwind (CDN for rapid prototyping/compatibility, though we will move to custom CSS) -->
     <!-- Using standard CSS as requested, but keeping structure ready for styling -->
@@ -22,28 +22,6 @@
         <div class="bg-gradient-overlay"></div>
         <div class="bg-blur-blob blob-1"></div>
         <div class="bg-blur-blob blob-2"></div>
-
-        <!-- Overlays (Moved out of grid and container for true fullscreen) -->
-        <div id="start-overlay" class="overlay active">
-            <h2>¿ESTÁS LISTO?</h2>
-            <div class="instructions-content">
-                <p>Cómo jugar:</p>
-                <ul>
-                    <li>Desliza las piezas para moverlas</li>
-                    <li>Ordena la imagen correctamente</li>
-                    <li>Tienes 1 minuto para ganar</li>
-                </ul>
-            </div>
-            <button id="start-btn" class="cta-btn">¡COMENZAR!</button>
-            <button onclick="location.href='../../index.html'" class="cta-btn secondary">MENÚ PRINCIPAL</button>
-        </div>
-
-        <div id="result-modal" class="overlay hidden">
-            <h2 id="result-title"></h2>
-            <p id="result-message"></p>
-            <button id="play-again-btn" class="cta-btn">JUGAR DE NUEVO</button>
-            <button onclick="location.href='../../index.html'" class="cta-btn secondary">MENÚ PRINCIPAL</button>
-        </div>
 
         <!-- Header -->
         <header>
@@ -100,8 +78,28 @@
         </main>
     </div>
 
-    <!-- Libraries locales (offline) -->
-    <!-- Asegúrate de copiar también la carpeta node_modules a la PC del evento -->
+    <!-- Overlays (Moved out of grid and container for true fullscreen) -->
+    <div id="start-overlay" class="overlay active">
+        <h2>¿ESTÁS LISTO?</h2>
+        <div class="instructions-content">
+            <p>Cómo jugar:</p>
+            <ul>
+                <li>Desliza las piezas para moverlas</li>
+                <li>Ordena la imagen correctamente</li>
+                <li>Tienes 1 minuto para ganar</li>
+            </ul>
+        </div>
+        <button id="start-btn" class="cta-btn">¡COMENZAR!</button>
+        <button onclick="location.href='../../index.html'" class="cta-btn secondary">MENÚ PRINCIPAL</button>
+    </div>
+
+    <div id="result-modal" class="overlay hidden">
+        <h2 id="result-title"></h2>
+        <p id="result-message"></p>
+        <button id="play-again-btn" class="cta-btn">JUGAR DE NUEVO</button>
+        <button onclick="location.href='../../index.html'" class="cta-btn secondary">MENÚ PRINCIPAL</button>
+    </div>
+
     <script src="../../libs/gsap.min.js"></script>
     <script src="../../libs/confetti.browser.js"></script>
     <script src="../../libs/howler.min.js"></script>

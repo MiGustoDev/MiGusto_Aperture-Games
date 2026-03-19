@@ -71,22 +71,36 @@ const isSolvable = (tiles) => {
 
 const shuffleTiles = () => {
     const count = TILE_COUNT * TILE_COUNT;
-    let newTiles = Array.from({ length: count - 1 }, (_, i) => i);
+    // Mezcla "más amable": partimos del estado resuelto y hacemos N movimientos válidos.
+    // Esto evita shuffles aleatorios que pueden caer en configuraciones muy difíciles.
+    const newTiles = Array.from({ length: count - 1 }, (_, i) => i);
     newTiles.push(-1); // -1 is empty
 
-    // Fisher-Yates
-    for (let i = newTiles.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newTiles[i], newTiles[j]] = [newTiles[j], newTiles[i]];
+    const SHUFFLE_MOVES = 18; // ajuste leve: un poco más fácil pero sigue siendo un reto
+    let prevEmptyIndex = -1;
+
+    const getAdjacentIndices = (index) => {
+        const { row, col } = getRowCol(index);
+        const adj = [];
+        if (row > 0) adj.push(index - TILE_COUNT);
+        if (row < TILE_COUNT - 1) adj.push(index + TILE_COUNT);
+        if (col > 0) adj.push(index - 1);
+        if (col < TILE_COUNT - 1) adj.push(index + 1);
+        return adj;
+    };
+
+    for (let m = 0; m < SHUFFLE_MOVES; m++) {
+        const emptyIndex = newTiles.indexOf(-1);
+        let options = getAdjacentIndices(emptyIndex);
+        // Evitar deshacer el movimiento anterior (si hay alternativa)
+        if (prevEmptyIndex !== -1 && options.length > 1) {
+            options = options.filter((idx) => idx !== prevEmptyIndex);
+        }
+        const swapIndex = options[Math.floor(Math.random() * options.length)];
+        [newTiles[emptyIndex], newTiles[swapIndex]] = [newTiles[swapIndex], newTiles[emptyIndex]];
+        prevEmptyIndex = emptyIndex;
     }
 
-    if (!isSolvable(newTiles)) {
-        if (newTiles[0] !== -1 && newTiles[1] !== -1) {
-            [newTiles[0], newTiles[1]] = [newTiles[1], newTiles[0]];
-        } else {
-            [newTiles[newTiles.length - 2], newTiles[newTiles.length - 3]] = [newTiles[newTiles.length - 3], newTiles[newTiles.length - 2]];
-        }
-    }
     return newTiles;
 };
 

@@ -49,6 +49,7 @@ let layer2;
 let graphics;
 let scoreText;
 let livesImage = [];
+let ghostSpawnTiles = [];
 let tiles = "pacman-tiles";
 let winScreen = document.getElementById("win-screen");
 let restartButton = document.getElementById("restart-btn");
@@ -246,6 +247,7 @@ function create() {
             }
         }
     });
+    ghostSpawnTiles = safeTiles;
 
     map.filterObjects("Objects", function (value, index, array) {
         if (value.name == "Ghost") {
@@ -264,6 +266,18 @@ function create() {
             i++;
         }
     });
+
+    // Aparición más aleatoria (y un poco más fácil):
+    // soltamos los fantasmas con un delay random al inicio (no todos encima desde el segundo 0)
+    if (ghosts.length > 0) {
+        // el primero sale rápido; los demás con delays random
+        ghosts.forEach((g, idx) => {
+            const minMs = idx === 0 ? 0 : 1500;
+            const maxMs = idx === 0 ? 800 : 9000;
+            const delayMs = Phaser.Math.Between(minMs, maxMs);
+            g.scheduleRelease(scene.time.now, delayMs);
+        });
+    }
 
     this.physics.add.collider(player.sprite, layer1);
     this.physics.add.collider(player.sprite, layer2);
@@ -383,7 +397,7 @@ function update() {
     player.update();
 
     for (let ghost of ghosts) {
-        ghost.update();
+        ghost.update(this.time.now);
         this.physics.world.wrap(ghost.sprite);
     }
 
@@ -456,9 +470,11 @@ class Ghost {
             .setOrigin(0.5);
         this.spawnPoint = position;
         this.anim = anim;
-        this.speed = 130;
+        this.speed = 120; // leve nerf para hacerlo un poco más fácil con 1 vida
         this.moveTo = new Phaser.Geom.Point();
         this.safetile = [-1, 18, 19, 20]; // Added 20 for the ghost gate / red line
+        this.released = true;
+        this.releaseAtMs = 0;
 
         // Optimize physics body for no-stick movement
         // Circle body smaller than tile (32px) prevents snagging on corners
@@ -491,9 +507,41 @@ class Ghost {
         this.lastTurnedTile = { x: -1, y: -1 };
     }
 
+    scheduleRelease(nowMs, delayMs) {
+        this.released = false;
+        this.releaseAtMs = nowMs + delayMs;
+        this.freeze();
+        this.sprite.setAlpha(0);
+        this.sprite.body.enable = false;
+    }
+
+    release() {
+        // Respawn en un tile seguro aleatorio para mayor variedad
+        if (Array.isArray(ghostSpawnTiles) && ghostSpawnTiles.length > 0) {
+            const randTile = Phaser.Math.RND.pick(ghostSpawnTiles);
+            this.spawnPoint = new Phaser.Geom.Point(randTile.x, randTile.y);
+        }
+        this.sprite.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+        if (this.sprite.body) {
+            this.sprite.body.reset(this.spawnPoint.x, this.spawnPoint.y);
+        }
+        this.sprite.body.enable = true;
+        this.sprite.setAlpha(1);
+        this.released = true;
+        this.current = Phaser.NONE;
+        this.moveTo = new Phaser.Geom.Point();
+        this.move(this.rnd.pick([Phaser.LEFT, Phaser.RIGHT, Phaser.UP, Phaser.DOWN]));
+    }
+
     freeze() {
         this.moveTo = new Phaser.Geom.Point();
         this.current = Phaser.NONE;
+        this.turning = Phaser.NONE;
+        this.turningPoint = new Phaser.Geom.Point();
+        this.sprite.setVelocity(0, 0);
+        if (this.sprite.body) {
+            this.sprite.body.reset(this.sprite.x, this.sprite.y);
+        }
     }
 
     move() {
@@ -507,7 +555,15 @@ class Ghost {
         // Or re-roll? Re-rolling might spawn on top of player.
         // Let's stick to using the constructor-assigned spawnPoint for now, but that spawnPoint IS random.
 
+        // Respawn más aleatorio entre tiles seguros (si existen)
+        if (Array.isArray(ghostSpawnTiles) && ghostSpawnTiles.length > 0) {
+            const randTile = Phaser.Math.RND.pick(ghostSpawnTiles);
+            this.spawnPoint = new Phaser.Geom.Point(randTile.x, randTile.y);
+        }
         this.sprite.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+        if (this.sprite.body) {
+            this.sprite.body.reset(this.spawnPoint.x, this.spawnPoint.y);
+        }
         // this.move(this.rnd.pick([Phaser.UP, Phaser.DOWN])); // Old logic
         this.current = Phaser.NONE; // Reset current direction
         this.moveTo = new Phaser.Geom.Point(); // Reset velocity
@@ -550,16 +606,24 @@ class Ghost {
         this.sprite.angle = 0;
     }
 
-    update() {
+    update(nowMs) {
+        if (!this.released) {
+            if (typeof nowMs === "number" && nowMs >= this.releaseAtMs) {
+                this.release();
+            } else {
+                return;
+            }
+        }
         // Detect if stuck
         if (Math.abs(this.sprite.x - this.lastPosition.x) < 0.1 && Math.abs(this.sprite.y - this.lastPosition.y) < 0.1) {
             this.stuckTimer++;
-            if (this.stuckTimer > 30) { // 0.5 seconds stuck
-                this.chase();
-                this.stuckTimer = 0;
-            }
         } else {
             this.stuckTimer = 0;
+        }
+
+        // Soft recovery: recalcular ruta si está pegado un rato (sin resetear el contador)
+        if (this.stuckTimer > 30) { // ~0.5s
+            this.chase();
         }
 
         // Hard recovery: If really stuck (e.g. physics glitch), jump to current tile center

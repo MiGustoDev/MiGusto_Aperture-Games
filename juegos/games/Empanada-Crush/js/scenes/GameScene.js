@@ -1,7 +1,7 @@
 class GameScene extends Phaser.Scene {
     constructor() {
         super('GameScene');
-        this.gridSize = 8;
+        this.gridSize = 8; // Default
         this.tileSpacing = 8;
         // tileSize will be calculated in create() based on screen width
         this.empanadaTypes = [
@@ -32,6 +32,8 @@ class GameScene extends Phaser.Scene {
     }
 
     init() {
+        const isMobile = this.game.config.width < 600;
+        this.gridSize = isMobile ? 6 : 8;
         this.loadLevel();
     }
 
@@ -53,6 +55,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        const isMobile = this.game.config.width < 600;
         // Background
         let bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'background');
         bg.setDisplaySize(this.game.config.width, this.game.config.height);
@@ -91,7 +94,8 @@ class GameScene extends Phaser.Scene {
 
         const boardWidth = this.gridSize * (this.tileSize + this.tileSpacing);
         this.boardOffsetX = (this.game.config.width - boardWidth) / 2 + this.tileSize / 2;
-        this.boardOffsetY = (this.game.config.height - boardWidth) / 2 + this.tileSize / 2;
+        const mobileOffsetY = isMobile ? 50 : 0;
+        this.boardOffsetY = (this.game.config.height - boardWidth) / 2 + this.tileSize / 2 + mobileOffsetY;
 
         this.input.on('pointerup', (pointer) => {
             if (this.dragging && this.selectedTile) {
@@ -118,7 +122,7 @@ class GameScene extends Phaser.Scene {
         // Cheat Listener
         this.events.on('cheatScore', () => {
             if (!this.levelManager.isGameOver) {
-                this.score = 600;
+                this.score = 1000;
                 this.events.emit('updateScore', this.score);
                 this.showFloatingText(this.game.config.width / 2, this.game.config.height / 2, '¡HACKER!');
                 this.checkGameOver();
@@ -127,11 +131,14 @@ class GameScene extends Phaser.Scene {
 
         // Move Timer
         this.moveTimeLeft = 15000; // 15 seconds in ms
-        this.timerText = this.add.text(this.game.config.width / 2, 110, '15', {
+        const timerX = isMobile ? this.game.config.width - 80 : this.game.config.width / 2;
+        const timerY = isMobile ? 135 : 110;
+        this.timerText = this.add.text(timerX, timerY, '15', {
             fontFamily: 'Chewy',
-            fontSize: '32px',
+            fontSize: isMobile ? '28px' : '32px',
             fill: '#ffffff'
         }).setOrigin(0.5);
+        this.timerText.setAlpha(0); // Hide until game starts
 
         this.createBoard();
 
@@ -145,6 +152,15 @@ class GameScene extends Phaser.Scene {
                     this.cameras.main.postFX.clear();
                     this.isProcessing = false;
                 }
+            });
+        });
+
+        // Show Timer when game starts
+        this.events.on('gameStart', () => {
+            this.tweens.add({
+                targets: this.timerText,
+                alpha: 1,
+                duration: 500
             });
         });
     }
@@ -333,7 +349,6 @@ class GameScene extends Phaser.Scene {
                 const dist = Math.abs(row1 - row2) + Math.abs(col1 - col2);
                 if (dist === 1) {
                     this.swapTiles(this.selectedTile, container);
-                    this.selectedTile.setAlpha(1);
                     this.selectedTile = null;
                     this.dragging = false; // logic handled
                     return;
@@ -390,7 +405,6 @@ class GameScene extends Phaser.Scene {
             const targetTile = this.board[targetRow][targetCol];
             if (targetTile) {
                 this.swapTiles(this.selectedTile, targetTile);
-                this.selectedTile.setAlpha(1);
                 this.selectedTile = null;
             }
         }
@@ -1065,8 +1079,8 @@ class GameScene extends Phaser.Scene {
             // Como solo hay 1 nivel, ganaste el juego y el premio
             AlertManager.show({
                 title: '¡GANASTE!',
-                message: '¡Felicidades! Ganaste un<br><span style="color: #ffcc00; font-weight: bold; font-size: 22px;">COMBO DE 2 EMPANADAS</span><br><br><img src="assets/logo/Logo Mi Gusto 2025.png" style="width: 150px; height: auto;">',
-                buttonText: 'RECLAMAR PREMIO',
+                message: '¡Felicidades!<br><br><img src="assets/logo/Logo Mi Gusto 2025.png" style="width: 150px; height: auto;">',
+                buttonText: 'VOLVER A JUGAR',
                 type: 'win',
                 callback: () => {
                     // Aquí podrías redirigir a un formulario o mostrar un código
