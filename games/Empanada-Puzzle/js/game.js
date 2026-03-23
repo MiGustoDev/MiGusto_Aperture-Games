@@ -229,8 +229,8 @@ const initApp = () => {
         const { row, col } = getRowCol(currentIndex);
         
         gsap.set(tileEl, {
-            x: col * 266,
-            y: row * 266,
+            xPercent: col * 100,
+            yPercent: row * 100,
             left: 0,
             top: 0
         });
@@ -278,10 +278,10 @@ const handleTileClick = (index) => {
         const tileEl = tileElements[tileId];
         const { row: r1, col: c1 } = getRowCol(index);
         const { row: r2, col: c2 } = getRowCol(emptyIndex);        isAnimating = true;
-        // Animamos X e Y a coordenadas de píxel ENTERAS
+        // Animamos a coordenadas de porcentaje (Responsivo!)
         gsap.to(tileEl, {
-            x: c2 * 266,
-            y: r2 * 266,
+            xPercent: c2 * 100,
+            yPercent: r2 * 100,
             duration: 0.2,
             ease: "power2.inOut",
             onComplete: () => {
@@ -330,8 +330,8 @@ const renderGrid = () => {
         const el = tileElements[tileId];
         if (el) {
             gsap.set(el, {
-                x: col * 266,
-                y: row * 266
+                xPercent: col * 100,
+                yPercent: row * 100
             });
         }
     });

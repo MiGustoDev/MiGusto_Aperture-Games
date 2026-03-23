@@ -251,8 +251,8 @@ main {
 
 .puzzle-tile {
     position: absolute;
-    width: 260px; /* (798 / 3) - margen */
-    height: 260px;
+    width: 33.333%;
+    height: 33.333%;
     cursor: pointer;
     overflow: hidden;
     border-radius: 0.5rem;
@@ -293,8 +293,8 @@ main {
 
 .empty-tile {
     position: absolute;
-    width: calc(33.333% - 0.35rem);
-    height: calc(33.333% - 0.35rem);
+    width: 33.333%;
+    height: 33.333%;
     background: rgba(24, 24, 27, 0.5);
     border-radius: 0.5rem;
     left: 0;
@@ -629,42 +629,102 @@ main {
         width: 100% !important;
         height: 100% !important;
         z-index: 100000 !important;
-        padding: 1.5rem;
+        padding: 2rem 1.5rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start; /* Start from top to prevent clipping */
         align-items: center;
         background: rgba(0, 0, 0, 0.93);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
+        overflow-y: auto; /* Enable scroll if content is too tall */
     }
 
+    /* Rediseño Mobile según Referencia */
     .title-main {
-        font-size: 3.5rem !important;
-        margin-bottom: 2rem !important;
+        font-size: 2.2rem !important;
+        margin-bottom: 1.5rem !important;
+        color: var(--color-primary);
+        font-weight: 900;
     }
 
     .card-glass {
-        padding: 2rem;
+        padding: 1rem;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .instructions-card {
+        background: #1a1a1a;
+        padding: 1.5rem;
         border-radius: 2rem;
+        text-align: left;
+        width: 100%;
+        margin-bottom: 2rem;
     }
 
-    .step p {
+    .instructions-title {
+        color: var(--color-primary);
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin-bottom: 1.25rem;
+        text-transform: uppercase;
+    }
+
+    .instructions-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .instructions-list li {
+        color: #ffffff;
         font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        position: relative;
+        padding-left: 1.25rem;
     }
 
-    .step-number {
-        width: 2rem;
-        height: 2rem;
-        font-size: 1rem;
+    .instructions-list li::before {
+        content: "•";
+        color: var(--color-primary);
+        position: absolute;
+        left: 0;
+        font-size: 1.5rem;
+        line-height: 1;
     }
 
     .cta-btn {
-        padding: 1.1rem 2rem;
-        font-size: 1.3rem;
         width: 100%;
         max-width: 280px;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        border-radius: 1.5rem;
+        padding: 1rem 2rem;
+        text-transform: uppercase;
+        font-weight: 900;
+        border: none;
+    }
+
+    .cta-btn.main-btn {
+        background-color: var(--color-primary);
+        color: #000000;
+        font-size: 1.6rem;
+    }
+
+    .cta-btn.secondary {
+        background: #1a1a1a;
+        color: #ffffff;
+        font-size: 1.3rem;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        line-height: 1.2;
     }
 
     .puzzle-grid {
@@ -676,7 +736,6 @@ main {
         padding: 0.25rem;
     }
 
-    /* Target specific instructions under the grid */
     .instructions {
         margin-top: 1rem;
         font-size: 0.7rem;
