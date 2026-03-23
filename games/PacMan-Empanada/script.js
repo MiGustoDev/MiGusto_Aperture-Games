@@ -239,9 +239,8 @@ function create() {
     let safeTiles = [];
     layer1.forEachTile(function (tile) {
         if (tile.index === 19 || tile.index === 18 || tile.index === -1) { // -1 is open space
-            // ONLY Allow spawning in the middle section (Ghost house and surroundings)
-            // This prevents them from spawning in isolated decorative areas on the far right/left
-            if (tile.x >= 5 && tile.x <= 20 && tile.y >= 5 && tile.y <= 15) {
+            // ONLY Allow spawning inside the central ghost house box
+            if (tile.x >= 11 && tile.x <= 13 && tile.y >= 10 && tile.y <= 11) {
                 safeTiles.push({ x: tile.pixelX + offset, y: tile.pixelY + offset });
             }
         }
@@ -281,7 +280,8 @@ function create() {
     this.physics.add.collider(player.sprite, layer1);
     this.physics.add.collider(player.sprite, layer2);
     this.physics.add.collider(ghostsGroup, layer1);
-    this.physics.add.collider(ghostsGroup, layer2); // Add collision with layer 2 for ghosts too
+    // Removed collision with layer 2 for ghosts so they can pass through the gate
+    // this.physics.add.collider(ghostsGroup, layer2); 
     this.physics.add.overlap(
         player.sprite,
         pills,
@@ -675,7 +675,12 @@ class Ghost {
             (this.directions[this.current] && !this.isSafe(this.directions[this.current].index)) ||
             (tx_tile !== this.lastTurnedTile.x || ty_tile !== this.lastTurnedTile.y)
         ) {
-            this.chase();
+            // Logic to escape the ghost house: if inside, force UP
+            if (tx_tile >= 11 && tx_tile <= 13 && ty_tile >= 10 && ty_tile <= 11) {
+                this.setTurn(Phaser.UP);
+            } else {
+                this.chase();
+            }
         }
     }
     chase() {
