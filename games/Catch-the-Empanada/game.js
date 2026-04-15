@@ -30,8 +30,8 @@ const ITEM_SIZE = 60;
 const MAX_ITEMS = 8;
 
 function resizeCanvas() {
-    canvas.width = gameContainer.clientWidth;
-    canvas.height = gameContainer.clientHeight;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
     CANVAS_WIDTH = canvas.width;
     CANVAS_HEIGHT = canvas.height;
     // Adjust player Y position to stay near bottom
