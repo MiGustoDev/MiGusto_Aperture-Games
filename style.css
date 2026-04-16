@@ -56,7 +56,7 @@ h1 {
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     justify-content: center;
     margin: 0 auto;
@@ -105,6 +105,12 @@ h1 {
 
     .logo {
         max-width: 200px;
+    }
+}
+
+@media (max-width: 900px) {
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

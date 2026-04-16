@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bubble Empanada Shooter</title>
+    <link rel="icon" type="image/png" href="../Empanada-Crush/assets/logo/Logo Mi Gusto 2025.png">
+    <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-shell">
+        <div id="game-container"></div>
+
+        <div id="hud" class="hud hidden">
+            <div class="hud-pill">
+                <span class="hud-label">Puntaje</span>
+                <span id="score-value">0</span>
+            </div>
+            <div class="hud-pill">
+                <span class="hud-label">Tiros</span>
+                <span id="shots-value">30</span>
+            </div>
+            <button id="power-fire" class="hud-power" type="button">Fuego</button>
+        </div>
+
+        <div id="start-overlay" class="overlay">
+            <div class="panel">
+                <img src="../Empanada-Crush/assets/logo/Logo Mi Gusto 2025.png" alt="Mi Gusto" class="menu-logo">
+                <h1>BUBBLE EMPANADA SHOOTER</h1>
+                <p>Uní 3 o más empanadas iguales antes de quedarte sin tiros.</p>
+                <div class="floating-snacks">
+                    <span class="snack s1"></span>
+                    <span class="snack s2"></span>
+                    <span class="snack s3"></span>
+                </div>
+                <div class="actions">
+                    <button id="start-button" class="primary-btn" type="button">Jugar</button>
+                    <button class="secondary-btn" type="button" onclick="location.href='../../index.html'">Menú principal</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="end-overlay" class="overlay hidden">
+            <div class="panel">
+                <img src="../Empanada-Crush/assets/logo/Logo Mi Gusto 2025.png" alt="Mi Gusto" class="menu-logo small">
+                <h2 id="end-title">Fin del juego</h2>
+                <p id="end-message">Tu puntaje fue 0.</p>
+                <div class="actions">
+                    <button id="restart-button" class="primary-btn" type="button">Volver a jugar</button>
+                    <button class="secondary-btn" type="button" onclick="location.href='../../index.html'">Menú principal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../libs/phaser.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

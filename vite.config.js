@@ -28,6 +28,8 @@ export default defineConfig({
                 crush: 'games/Empanada-Crush/index.html',
                 puzzle: 'games/Empanada-Puzzle/index.html',
                 pacman: 'games/PacMan-Empanada/index.html',
+                bubbleshooter: 'games/Bubble-Empanada-Shooter/index.html',
+                memorygame: 'games/MemoryGame/index.html',
             }
         }
     }

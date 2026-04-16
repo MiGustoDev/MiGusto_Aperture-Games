@@ -16,3 +16,4 @@ start chrome --kiosk http://localhost:5173 --user-data-dir="%TEMP%\chrome-kiosk-
 
 :: Mantener la ventana abierta en caso de error
 pause
+
