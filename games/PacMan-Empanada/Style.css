@@ -127,7 +127,7 @@ body {
     }
 }
 
-#start-screen button {
+#start-screen #start-btn {
     background-color: yellow;
     color: black;
     border: none;
@@ -140,7 +140,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-#start-screen button:hover {
+#start-screen #start-btn:hover {
     transform: scale(1.1);
     background-color: #ffd700;
 }
@@ -213,7 +213,7 @@ body {
     animation: blink 0.5s infinite;
 }
 
-#win-screen button {
+#win-screen #restart-btn {
     background-color: #00ff00;
     color: black;
     border: none;
@@ -226,7 +226,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-#win-screen button:hover {
+#win-screen #restart-btn:hover {
     transform: scale(1.1);
     background-color: #32cd32;
 }
@@ -318,7 +318,7 @@ body {
     margin-bottom: 40px;
 }
 
-#gameover-screen button {
+#gameover-screen #retry-btn {
     background-color: #ff0000;
     color: white;
     border: none;
@@ -331,7 +331,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-#gameover-screen button:hover {
+#gameover-screen #retry-btn:hover {
     transform: scale(1.1);
     background-color: #cc0000;
 }
@@ -471,8 +471,30 @@ body {
         margin-bottom: 15px;
     }
 
-    #start-screen button, #win-screen button, #gameover-screen button {
+    #start-screen #start-btn, #win-screen #restart-btn, #gameover-screen #retry-btn {
         padding: 10px 30px;
         font-size: 20px;
     }
 }
+
+.btn-secondary {
+    display: block;
+    margin: 15px auto;
+    background-color: #333;
+    padding: 12px 25px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.btn-secondary:hover {
+    background-color: #444;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
